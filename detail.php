@@ -10,9 +10,9 @@ MercadoPago\SDK::setAccessToken('TEST-6213750683445204-121120-2e904ad2a41705a5a8
 $preference = new MercadoPago\Preference();
 //URL DE RETORNO AL FINALIZAR TRANSACCION
 $preference->back_urls = array(
-    "success" => "http://localhost:82/mp-ecommerce-php/",
-    "failure" => "http://http://localhost:82/mp-ecommerce-php/rechazado.php?error=failure",
-    "pending" => "http://localhost:82/mp-ecommerce-php/pendiente.php?error=pending"
+    "success" => "https://beto20-mp-ecommerce-php.herokuapp.com/",
+    "failure" => "https://beto20-mp-ecommerce-php.herokuapp.com/rechazado.php?error=failure",
+    "pending" => "https://beto20-mp-ecommerce-php.herokuapp.com/pendiente.php?error=pending"
 );
 $preference->auto_return = "approved";
 // Crea un ítem en la preferencia
