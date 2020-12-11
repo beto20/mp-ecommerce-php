@@ -1,4 +1,6 @@
 {
     "type": "project",
-    "require": {}
+    "require": {
+        "mercadopago/dx-php": "^2.2"
+    }
 }
