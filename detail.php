@@ -68,7 +68,7 @@
     //PARA QUE NO HAYA ESTADOS PENDIENTES DE PAGO
     $preference->binary_mode = TRUE;
     //URL DE WEBHOOK
-    $preference->notification_url = 'https://beto20-mp-ecommerce-php.herokuapp.com/webhook';
+    $preference->notification_url = 'https://beto20-mp-ecommerce-php.herokuapp.com/webhook.php';
     //GUARDAR PREFERENCIAS
     $preference->save();
 /*
