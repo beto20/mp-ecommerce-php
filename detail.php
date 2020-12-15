@@ -1,28 +1,96 @@
 <?php
-//PASO 1
-// SDK de Mercado Pago
-require __DIR__ .  '/vendor/autoload.php';
-//PASO 2
-// Agrega credenciales
-MercadoPago\SDK::setAccessToken('TEST-6213750683445204-121120-2e904ad2a41705a5a83e0f9e3985a34d-686355989');
-//PASO 3
-// Crea un objeto de preferencia
-$preference = new MercadoPago\Preference();
-//URL DE RETORNO AL FINALIZAR TRANSACCION
-$preference->back_urls = array(
-    "success" => "https://beto20-mp-ecommerce-php.herokuapp.com/",
-    "failure" => "https://beto20-mp-ecommerce-php.herokuapp.com/rechazado.php?error=failure",
-    "pending" => "https://beto20-mp-ecommerce-php.herokuapp.com/pendiente.php?error=pending"
-);
-$preference->auto_return = "approved";
-// Crea un ítem en la preferencia
+    //PASO 1
+    // SDK de Mercado Pago
+    require __DIR__ .  '/vendor/autoload.php';
+    //PASO 2
+    // Agrega credenciales
+    MercadoPago\SDK::setAccessToken('APP_USR-8208253118659647-112521-dd670f3fd6aa9147df51117701a2082e-677408439');
 
-$item = new MercadoPago\Item();
-$item->title = $_POST['title'];
-$item->quantity = $_POST['unit'];
-$item->unit_price = $_POST['price'];
-$preference->items = array($item);
-$preference->save();
+    // Si son Mercadopago Dev Certificados, tienen ese código, sino omitir esa linea
+    MercadoPago\SDK::setIntegratorId(getenv('dev_2e4ad5dd362f11eb809d0242ac130004'));
+
+    //PASO 3
+    // Crea un objeto de preferencia
+    $preference = new MercadoPago\Preference();
+
+    $preference->auto_return = "approved";
+    // Crea un ítem en la preferencia
+    //DATOS DEL ITEM
+    $item = new MercadoPago\Item();
+    $item->id = $_POST['id'];
+    $item->title = $_POST['title'];
+    $item->quantity = $_POST['unit'];
+    $item->unit_price = $_POST['price'];
+    $preference->items = array($item);
+    //$preference->save();
+
+    //DATOS DEL COMPRADOR
+    $payer = new MercadoPago\Payer();
+    $payer->name = "Lalo";
+    $payer->surname = "Landa";
+    $payer->email = "test_user_46542185@testuser.com";
+    $payer->phone = array(
+    "area_code" => "51",
+    "number" => "949128866"
+    );
+    $payer->identification = array(
+    "type" => "DNI",
+    "number" => "22334444"
+    );
+    $payer->address = array(
+    "street_name" => "Insurgentes Sur",
+    "street_number" => 1602,
+    "zip_code" => "03940"
+    );
+
+    $preference->payer = $payer;
+    
+    // Opcional por si quieren quitar métodos de pago de la preferencia y setear las cuotas
+    $preference->payment_methods = array(
+        "excluded_payment_types" => array(
+            array("id" => "atm"),
+            array('id' => 'bank_transfer'),
+            array('id' => 'ticket')
+        ),
+        "installments" => 6,
+        "default_installments" => 6
+    );
+
+    //URL DE RETORNO AL FINALIZAR TRANSACCION
+    $preference->back_urls = array(
+        "success" => "https://beto20-mp-ecommerce-php.herokuapp.com/",
+        "failure" => "https://beto20-mp-ecommerce-php.herokuapp.com/rechazado.php?error=failure",
+        "pending" => "https://beto20-mp-ecommerce-php.herokuapp.com/pendiente.php?error=pending"
+    );
+
+    //RETORNA SIEMPRE
+    $preference->auto_return = "all";
+    //PARA QUE NO HAYA ESTADOS PENDIENTES DE PAGO
+    $preference->binary_mode = TRUE;
+    //URL DE WEBHOOK
+    $preference->notification_url = 'https://beto20-mp-ecommerce-php.herokuapp.com/webhook';
+    //GUARDAR PREFERENCIAS
+    $preference->save();
+/*
+    //RECEPTOR DE NOTIFICACIONES
+    MercadoPago\SDK::setAccessToken("APP_USR-8208253118659647-112521-dd670f3fd6aa9147df51117701a2082e-677408439");
+
+    switch($_POST["type"]) {
+        case "payment":
+            $payment = MercadoPago\Payment.find_by_id($_POST["id"]);
+            break;
+        case "plan":
+            $plan = MercadoPago\Plan.find_by_id($_POST["id"]);
+            break;
+        case "subscription":
+            $plan = MercadoPago\Subscription.find_by_id($_POST["id"]);
+            break;
+        case "invoice":
+            $plan = MercadoPago\Invoice.find_by_id($_POST["id"]);
+            break;
+    }
+
+    */
 ?>
 
 
@@ -153,6 +221,7 @@ $preference->save();
                                             src="https://www.mercadopago.com.pe/integrations/v1/web-payment-checkout.js"
                                             data-preference-id="<?php echo $preference->id; ?>">
                                         </script>
+                                        <script src="https://www.mercadopago.com/v2/security.js" view=""></script>
                                     </form>
                                 </div>
                             </div>
