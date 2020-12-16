@@ -19,8 +19,11 @@
     $item = new MercadoPago\Item();
     $item->id = $_POST['id'];
     $item->title = $_POST['title'];
+    $item->description  = $_POST['description'];
+    $item->picture_url = $_POST['img'];
     $item->quantity = $_POST['unit'];
     $item->unit_price = $_POST['price'];
+    $item->email = 'alberto.vs@outlook.com';
     $preference->items = array($item);
     //$preference->save();
 
@@ -44,16 +47,17 @@
     );
 
     $preference->payer = $payer;
-    
+
     // Opcional por si quieren quitar métodos de pago de la preferencia y setear las cuotas
     $preference->payment_methods = array(
         "excluded_payment_types" => array(
             array("id" => "atm"),
-            array('id' => 'bank_transfer'),
-            array('id' => 'ticket')
+            array("id" => "diners")
+            //array('id' => 'bank_transfer'),
+            //array('id' => 'ticket')
         ),
         "installments" => 6,
-        "default_installments" => 6
+        "default_installments" => 1
     );
 
     //URL DE RETORNO AL FINALIZAR TRANSACCION
@@ -221,6 +225,8 @@
                                             src="https://www.mercadopago.com.pe/integrations/v1/web-payment-checkout.js"
                                             data-preference-id="<?php echo $preference->id; ?>">
                                         </script>
+                                        <!--<a href="<?php echo $preference->init_point; ?>" src="https://www.mercadopago.com.pe/integrations/v1/web-payment-checkout.js">Comprar</a>-->
+
                                         <script src="https://www.mercadopago.com/v2/security.js" view=""></script>
                                     </form>
                                 </div>

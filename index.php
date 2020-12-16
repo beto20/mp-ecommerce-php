@@ -260,6 +260,7 @@
                                         <form action="detail.php" method="get">
                                             <input type="hidden" name="id" vale="1">
                                             <input type="hidden" name="img" value="./assets/samsung-galaxy-s9-xxl.jpg">
+                                            <input type="hidden" name ="description" value="Telefono de la marca samsung">
                                             <input type="hidden" name="title" value="Samsung Galaxy S9">
                                             <input type="hidden" name="price" value="15000">
                                             <input type="hidden" name="unit" value="1">
